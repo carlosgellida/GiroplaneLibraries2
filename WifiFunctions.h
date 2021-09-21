@@ -20,6 +20,8 @@ StaticJsonDocument<200> jsonDocTx;
 bool wsconnected = false;
 bool mensaje_recibido = true; 
 
+Matrix<4, 1> CurrQuaternion, DesiQuaternion; 
+
 void printWifiData() {
 
   // print your WiFi shield's IP address:
@@ -114,8 +116,9 @@ void foundIP(void){
         connectedServer = true; 
         break;
       }
-      Serial.println("Please wait, looking for the PC IP");
-      delay(10) ; 
+      Serial.print("Please wait, looking for the PC IP: ");
+      Serial.println(iPdelPC); 
+      delay(500) ; 
     }
     if(connectedServer){
       break ; 

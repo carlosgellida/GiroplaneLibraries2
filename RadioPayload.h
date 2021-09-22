@@ -54,16 +54,15 @@ void InitialiceRadio() {
     timming = micros(); 
 }
 
-bool send(Matrix<4, 1> qCurrent){
+bool send(Adafruit_BNO055 &bno, Matrix<4, 1> &qCurrent){
   bool sended = false; 
 
   if ((micros() - timming) > 9000){
   //String qCurrentString = arr2str(qCurrent); 
 
   if (role) {
-    // This device is a TX node
-    //payload += 0.01;   // increment float payload
-    //unsigned long start_timer = micros();                    // start the timer
+    qCurrent = getQuaternio(bno) ; //Obtain the current quaternion from DMP
+
     radio.stopListening();
     //bool report = radio.write(&qCurrentString, sizeof(qCurrentString));      // transmit & save the report
     bool report = radio.write(&qCurrent, sizeof(qCurrent));  

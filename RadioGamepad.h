@@ -61,9 +61,7 @@ bool send(Matrix<4, 1> qDeseado){
   if (role) {
     //String qDeseadoString = arr2str(qDeseado); 
     // This device is a TX node
-    payload += 0.01;   
-    //unsigned long start_timer = micros();                    // start the timer
-    //bool report = radio.write(&qDeseadoString, sizeof(qDeseadoString));      // transmit & save the report
+      
     bool report = radio.write(&qDeseado, sizeof(qDeseado)); 
 
     if (report) {

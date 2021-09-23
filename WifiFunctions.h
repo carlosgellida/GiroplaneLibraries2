@@ -216,7 +216,7 @@ void taskWifiNoModem(void) {
 }
 
 
-void getAndSendInfo()
+void getAndSendInfo(Matrix<4, 1> &qCurrent, Matrix<4, 1> &qDeseado)
 {
   //Declare a string where data is saved
   String output;
@@ -228,10 +228,10 @@ void getAndSendInfo()
   jsonDocTx.clear();
 
   //Almacenar info del quaternio en documento JSON
-  jsonDocTx["QW"] = CurrQuaternion(0) ; 
-  jsonDocTx["QX"] = CurrQuaternion(1) ; 
-  jsonDocTx["QY"] = CurrQuaternion(2) ; 
-  jsonDocTx["QZ"] = CurrQuaternion(3) ; 
+  jsonDocTx["QW"] = qCurrent(0) ; 
+  jsonDocTx["QX"] = qCurrent(1) ; 
+  jsonDocTx["QY"] = qCurrent(2) ; 
+  jsonDocTx["QZ"] = qCurrent(3) ;  
 
   /*jsonDocTx["Lx"] = buttons.Lx ; // Agregar lectura de botones al archivo JSON
   jsonDocTx["Ly"] = buttons.Ly ; 
@@ -240,10 +240,10 @@ void getAndSendInfo()
   jsonDocTx["Ry"] = buttons.Ry ; 
   jsonDocTx["Rw"] = buttons.Rw ; */
 
-  jsonDocTx["dQW"] = DesiQuaternion(0) ; 
-  jsonDocTx["dQX"] = DesiQuaternion(1) ; 
-  jsonDocTx["dQY"] = DesiQuaternion(2) ; 
-  jsonDocTx["dQZ"] = DesiQuaternion(3) ; 
+  jsonDocTx["dQW"] = qDeseado(0); 
+  jsonDocTx["dQX"] = qDeseado(1); 
+  jsonDocTx["dQY"] = qDeseado(2); 
+  jsonDocTx["dQZ"] = qDeseado(3);  
 
   //Convertir documento JSON en un string
   serializeJson(jsonDocTx, output);

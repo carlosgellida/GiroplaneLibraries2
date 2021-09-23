@@ -31,7 +31,7 @@ void InitialiceRadio() {
 
   radio.setPALevel(RF24_PA_MAX);  // RF24_PA_MAX is default.
 
-  radio.setRetries(1, 5); 
+  radio.setRetries(1, 6); 
 
   // save on transmission time by setting the radio to only transmit the
   // number of bytes we need to transmit a float
@@ -95,9 +95,7 @@ bool recieve(Matrix<4, 1> &qCurrent){
       radio.read(&qCurrent, bytes);            // fetch payload from FIFO
       //qCurrent = str2arr(qCurrenString); 
       Serial.print(F("Received "));
-      Serial.print(bytes);                    // print the size of the payload
-      Serial.print(F(" Bytes on pipe "));
-      Serial.println(pipe);                     // print the pipe number
+      Serial << qCurrent << '\n' ; 
       role = !role  ;
       recieved = true; 
       radio.stopListening();

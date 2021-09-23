@@ -56,20 +56,16 @@ void InitialiceRadio() {
     time2 = micros(); 
 }
 
-bool send(Matrix<4, 1> qCurrent){
-  bool sended = false; 
-
-    radio.stopListening();
-
+void deepSend(Matrix<4, 1> &qCurrent){
     bool report = radio.write(&qCurrent, sizeof(qCurrent));  
 
     if (report) {
-      Serial.print(F("Transmission successful! "));          // payload was delivered
+      //Serial.print(F("Transmission successful! "));          // payload was delivered
       Serial.print(F("time taken to send: "));
       Serial.print(micros() - time2);                 // print the timer result
       time2 = micros(); 
       Serial.print(F(" us.")); 
-      //Serial << qCurrent << '\n' ; 
+      Serial << qCurrent << '\n' ; 
       radio.startListening();
       sended = true; 
     } else {
@@ -78,12 +74,34 @@ bool send(Matrix<4, 1> qCurrent){
       radio.startListening();
       //InitialiceRadio();
     }
+}
 
+bool send(Adafruit_BNO055 &bno, Matrix<4, 1> &qCurrent){
+  bool sended = false; 
+
+
+    radio.stopListening();
+    Matrix<4, 1> raw_data = getQuaternio(bno) ; //Obtain the current quaternion from DMP
+
+    raw_data = getQuaternio(bno);
+
+    if(isQuaternion(raw_data)){ //Sí la información dada por la IMU es cuaternio almacena el valor
+    qCurrent = raw_data ;  
+    deepSend(raw_data); 
+    } else{
+      raw_data = getQuaternio(bno);
+      if(isQuaternion(raw_data)){
+          qCurrent = raw_data ; 
+          deepSend(raw_data); 
+      }
+    }
+    
   return sended; 
 }
 
 bool recieve(Matrix<4, 1> &qDeseado){
   bool recieved = false; 
+
 
   timming = micros(); 
   while(true){
@@ -105,7 +123,7 @@ bool recieve(Matrix<4, 1> &qDeseado){
       break ; 
     }
 
-    if(micros() - timming > 8000){
+    if(micros() - timming > 10000){
       Serial.println("time listening exceded!"); 
       role = !role; 
       break; 
